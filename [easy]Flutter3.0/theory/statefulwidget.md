@@ -1,3 +1,7 @@
+- statefulWidget
+ statefulWidget으로 클래스를 생성하면 동적인 위젯 구현이 가능하다.
+ 동적 화면 구현 원리는 기존의 위젯을 삭제하고 바뀐 새로운 위치를 추가하는 원리이다.
+
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
