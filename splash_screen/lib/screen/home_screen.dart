@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:splash_screen/component/number_to_image.dart';
 
 import 'package:webview_flutter/webview_flutter.dart';
 import 'dart:async';
@@ -16,6 +17,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<int> numbers = [123, 456, 789];
+  int maxNumber = 1000;
 
   @override
   Widget build(BuildContext context) {
@@ -28,13 +30,19 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               /// 제목과 아이콘 버튼이 있는곳
-              _Header(onPressed: onSettingIconPressed),
+              _Header(
+                onPressed: onSettingIconPressed
+              ),
 
               /// 숫자가 있는곳
-              _Body(numbers: numbers),
+              _Body(
+                numbers: numbers
+              ),
 
               /// 버튼이 있는곳
-              _Footer(onPressed: generateRandomNumber),
+              _Footer(
+                onPressed: generateRandomNumber
+              ),
             ],
           ),
         ),
@@ -42,14 +50,19 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  onSettingIconPressed() {
-    Navigator.of(context).push(
+  onSettingIconPressed() async {
+    final result = await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (BuildContext context) {
-          return SettingScreen();
+          return SettingScreen(
+            maxNumber: maxNumber,
+          );
         },
       ),
     );
+    // push의 메서드에 async를 주고 Navigator를 result 변수화해서 await를 하면
+    // 하위 페이지에서 pop안에 준 값이 result값에 반환
+    maxNumber = result;
   }
 
   generateRandomNumber() {
@@ -59,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // Set에는 중복되는 값이 들어가지 못함
 
     while (newNumbers.length < 3) {
-      final randomNumber = rand.nextInt(1000);
+      final randomNumber = rand.nextInt(maxNumber);
       newNumbers.add(randomNumber);
     }
 
@@ -108,24 +121,7 @@ class _Body extends StatelessWidget {
       // Expanded로 최대로 확장하기
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children:
-            numbers
-                .map((e) => e.toString().split(''))
-                .map(
-                  (e) => Row(
-                    children:
-                        e
-                            .map(
-                              (number) => Image.asset(
-                                'asset/img/$number.png',
-                                width: 50.0,
-                                height: 70.0,
-                              ),
-                            )
-                            .toList(),
-                  ),
-                )
-                .toList(),
+        children: numbers.map((e) => NumberToImage(number: e)).toList(),
       ),
     );
   }
