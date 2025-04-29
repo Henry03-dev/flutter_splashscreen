@@ -86,7 +86,11 @@ class _Number extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(child: NumberToImage(number: maxNumber.toInt()));
+    return Expanded(
+      child: NumberToImage(
+        number: maxNumber.toInt()
+      )
+    );
   }
 }
 
