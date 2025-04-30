@@ -97,12 +97,15 @@ class HomeScreen extends StatelessWidget {
               ),
               child: Text('Outlined Button Shape'),
             ),
+            // Icon Button 사용하기
             OutlinedButton.icon(
               onPressed: () {},
               icon: Icon(
                 Icons.keyboard_alt_outlined
               ),
               label: Text('키보드'),
+
+
               style: OutlinedButton.styleFrom(
                 shape: ContinuousRectangleBorder(
                   borderRadius: BorderRadius.circular(
