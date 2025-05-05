@@ -23,6 +23,7 @@ void main() {
         ),
         '/two': (context) => const RouteTwoScreen(),
         '/three': (context) => const RouteThreeScreen(),
+        /// Declarative 방식으로 라우트를 설정할 수 있다.
       },
     ),
   );
