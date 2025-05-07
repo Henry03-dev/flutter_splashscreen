@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 
+import 'dart:io';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -12,23 +14,27 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool showVideoPlayer = false;
+  XFile? video;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body:
-          showVideoPlayer
-              ? _VideoPlayer()
-              : _VideoSelecter(onLogoTap: onLogoTap),
+          video != null 
+          ? _VideoPlayer(
+              video: video!,
+          ) 
+          : _VideoSelecter(onLogoTap: onLogoTap),
     );
   }
 
   onLogoTap() async {
-    final video = await ImagePicker().pickVideo(
-      source: ImageSource.gallery
-      );
+    final video = await ImagePicker().pickVideo(source: ImageSource.gallery);
 
-      print(video);
+    setState(() {
+      this.video = video;
+    });
   }
 }
 
@@ -106,11 +112,55 @@ class _Title extends StatelessWidget {
   }
 }
 
-class _VideoPlayer extends StatelessWidget {
-  const _VideoPlayer({super.key});
+class _VideoPlayer extends StatefulWidget {
+  final XFile video;
+  const _VideoPlayer({
+    required this.video,
+    super.key
+    });
+
+  @override
+  State<_VideoPlayer> createState() => _VideoPlayerState();
+}
+
+class _VideoPlayerState extends State<_VideoPlayer> {
+  late final VideoPlayerController videoPlayerController;
+  // late > 해당 값이 사용되기 전에 무조건 초기화
+
+  @override
+  void initState() {
+    super.initState();
+
+    initializeController();
+  }
+
+  initializeController() async {
+    videoPlayerController = VideoPlayerController.file(
+      File(
+        widget.video.path,
+      ),
+    );
+
+    await videoPlayerController.initialize();
+
+    setState(() {}); 
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text('video player'));
+    return Center(
+      child: AspectRatio(
+        aspectRatio: videoPlayerController.value.aspectRatio,
+        child: VideoPlayer(
+          videoPlayerController,
+        ),
+      ),
+    );
   }
+
+  @override
+void dispose() {
+  videoPlayerController.dispose();
+  super.dispose();
+}
 }
