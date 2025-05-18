@@ -38,6 +38,7 @@ dependencies:
   webview_flutter_web: ^0.2.2+4
   video_player: ^2.8.2
   image_picker: ^1.0.7
+  google_maps_flutter: ^2.6.0
 
 dev_dependencies:
   flutter_test:
